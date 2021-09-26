@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CategoryRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -22,6 +24,16 @@ class Category
      */
     private $name;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Society::class, mappedBy="category")
+     */
+    private $societies;
+
+    public function __construct()
+    {
+        $this->societies = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -35,6 +47,36 @@ class Category
     public function setName(?string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Society[]
+     */
+    public function getSocieties(): Collection
+    {
+        return $this->societies;
+    }
+
+    public function addSociety(Society $society): self
+    {
+        if (!$this->societies->contains($society)) {
+            $this->societies[] = $society;
+            $society->setCategory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSociety(Society $society): self
+    {
+        if ($this->societies->removeElement($society)) {
+            // set the owning side to null (unless already changed)
+            if ($society->getCategory() === $this) {
+                $society->setCategory(null);
+            }
+        }
 
         return $this;
     }
