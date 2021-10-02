@@ -30,10 +30,10 @@ class AutoModelCommand extends Command
     private $customCategory;
 
 
-    /**
-     * Constructeur de la classe
-     * @param EntityManagerInterface $entityManager
-     * @param null $name
+    /*
+     * =============================================
+     *      Définition du constructeur de la classe
+     * =============================================
      */
     public function __construct(EntityManagerInterface $entityManager, $name = null) {
 
@@ -42,6 +42,49 @@ class AutoModelCommand extends Command
 
         parent::__construct($name);
     }
+
+    /*
+     * =============================================
+     *      Définition des setters de la classe
+     * =============================================
+     */
+
+    public function setIo(SymfonyStyle $io){
+        $this->io = $io;
+    }
+
+    public function setCustomSociety(SocietyClass $customSociety){
+        $this->customSociety = $customSociety;
+    }
+
+    public function setCustomCategory(CategoryClass $customCategory){
+        $this->customCategory = $customCategory;
+    }
+
+    /*
+     * =============================================
+     *      Définition des getters de la classe
+     * =============================================
+     */
+
+    public function getIo(){
+        return $this->io;
+    }
+
+    public function getCustomSociety()
+    {
+        return $this->customSociety;
+    }
+
+    public function getCustomCategory(){
+        return $this->customCategory;
+    }
+
+    /*
+     * =============================================
+     *      Définition des méthodes de la classe
+     * =============================================
+     */
 
     /**
      * Méthode Configure
@@ -70,8 +113,7 @@ class AutoModelCommand extends Command
 
             $this->start();
 
-            // Vérifions si l'utilisateur souhaite utiliser les données par défaut
-            $this->io->confirm('Voulez-vous enregitrer les données par défaut ?');
+            $this->askDefautData($input, $output);
 
             $this->finish();
 
@@ -99,6 +141,15 @@ class AutoModelCommand extends Command
      */
     public function finish(){
         $this->io->success('Toutes les données sont enregistrées avec succès');
+    }
+
+    public function askDefautData(InputInterface $input = null, OutputInterface $output = null){
+        // Vérifions si l'utilisateur souhaite utiliser les données par défaut
+        $resp = $this->io->confirm('Voulez-vous enregitrer les données par défaut ?');
+
+        ($resp)
+            ? $this->defaultMode()
+            : '';
     }
 
     /**
@@ -156,8 +207,7 @@ class AutoModelCommand extends Command
      * @param \Exception|null $e
      */
     public function display_error(\Exception $e = null){
-
         $this->io->error($e->getMessage());
-
     }
+
 }
