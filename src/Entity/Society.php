@@ -42,6 +42,54 @@ class Society
      */
     private $category;
 
+    /*
+     * =============================================
+     *      Définition des setters de la classe
+     * =============================================
+     */
+
+    public function setName(?string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function setCreatedAt(?\DateTimeImmutable $created_at): self
+    {
+        $this->created_at = $created_at;
+
+        return $this;
+    }
+
+
+    public function setImg(?string $img): self
+    {
+        $this->img = $img;
+
+        return $this;
+    }
+
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function setCategory(?Category $category): self
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
+    /*
+     * =============================================
+     *      Définition des getters de la classe
+     * =============================================
+     */
+
     public function getId(): ?int
     {
         return $this->id;
@@ -52,23 +100,9 @@ class Society
         return $this->name;
     }
 
-    public function setName(?string $name): self
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
     public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->created_at;
-    }
-
-    public function setCreatedAt(?\DateTimeImmutable $created_at): self
-    {
-        $this->created_at = $created_at;
-
-        return $this;
     }
 
     public function getImg(): ?string
@@ -76,34 +110,13 @@ class Society
         return $this->img;
     }
 
-    public function setImg(?string $img): self
-    {
-        $this->img = $img;
-
-        return $this;
-    }
-
     public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    public function setDescription(?string $description): self
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
     public function getCategory(): ?Category
     {
         return $this->category;
-    }
-
-    public function setCategory(?Category $category): self
-    {
-        $this->category = $category;
-
-        return $this;
     }
 }
