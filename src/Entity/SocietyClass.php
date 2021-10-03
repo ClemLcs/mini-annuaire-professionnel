@@ -110,19 +110,22 @@ class SocietyClass
     public function checkExistSociety(Array $data = null){
 
         // Recherche sur la table société une société ayant des données déjà existantes
-        $society = $this->em
-            ->getRepository(Society::class)
-            ->findBy([
-                'name' => $data['name']
-            ]);
 
-        if (!$society) {
-            // L'enregistrement n'existe pas
-            return 0;
+        foreach ($data as $key => $value){
+            $society = $this->em
+                ->getRepository(Society::class)
+                ->findOneBy([
+                   $key => $value
+                ]);
+
+            if (!$society) {
+                // L'enregistrement n'existe pas
+                return 0;
+            }
+
+            // L'enregistrement existe
+            return 1;
         }
-
-        // L'enregistrement existe
-        return 1;
     }
 
     /**
