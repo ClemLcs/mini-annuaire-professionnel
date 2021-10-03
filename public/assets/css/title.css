@@ -1,0 +1,18 @@
+.content-title{
+    margin-top: 5vh;
+    justify-items: center;
+    justify-content: center;
+    color: black;
+}
+
+.content-title h2{
+    text-align: center;
+    font-size: 55px;
+    line-height: 65px;
+}
+.content-title p{
+
+    font-size: 24px;
+    line-height: 24px;
+    margin: 2em;
+}

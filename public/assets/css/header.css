@@ -1,0 +1,33 @@
+header{
+    height: 10vh;
+}
+
+.ul-NavBar {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: transparent;
+    width: 100%;
+}
+
+.li-NavBar {
+    display: inline-block;
+    margin: 0 35px;
+    padding: 30px;
+}
+
+.logo{
+    float: left;
+    margin: 25px;
+    width: 198px;
+    height: 51px;
+}
+
+.li-NavBar a{
+    display: block;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: 20px;
+}

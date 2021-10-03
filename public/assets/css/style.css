@@ -1,0 +1,87 @@
+:root{
+    --colorRed: firebrick;
+    --colorGreen: darkolivegreen;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #122844;
+    color: #F7F7F7;
+}
+
+
+.row {
+    display: flex;
+}
+
+.wrap {
+    flex-wrap: wrap;
+}
+
+none{
+    display: none;
+}
+
+.blue {
+    background-color: steelblue;
+}
+
+.gold {
+    background-color: gold;
+}
+
+.red {
+    background-color: var(--colorRed);
+}
+
+.green {
+    background-color: darkolivegreen;
+}
+
+.pink {
+    background-color: pink;
+}
+
+.white{
+    background-color: #e3e7d3;
+    color: black;
+}
+
+.red-bold{
+    color: #D30D33;
+    font-weight: bold;
+}
+
+.pad-arround {
+    display: flex;
+    padding: 20px;
+    width: calc(100% - 40px);
+    min-height: 160px;
+}
+
+.margin-arround {
+    display: flex;
+    margin: 20px;
+    width: calc(100% - 40px);
+    min-height: 160px;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+}
+
+.color-red {
+    color: var(--colorRed);
+}
+
+.center{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.half_size {
+    width: 50%;
+}
