@@ -36,18 +36,23 @@ class CategoryClass extends SocietyClass
      */
     public function checkExistCategory(Array $data = null){
         // Recherche sur la table category une catégorie ayant des données déjà existantes
-        $category = $this->em
-            ->getRepository(Category::class)
-            ->findBy([
-                'name' => $data['name']
-            ]);
 
-        if (!$category) {
-            // L'enregistrement n'existe pas
-            return 0;
+        foreach ($data as $key => $value){
+            $category = $this->em
+                ->getRepository(Category::class)
+                ->findOneBy([
+                    $key => $value
+                ]);
+
+            if (!$category) {
+                // L'enregistrement n'existe pas
+                return 0;
+            }
+            // L'enregistrement existe
+            return 1;
         }
-        // L'enregistrement existe
-        return 1;
+
+
     }
 
     /**
