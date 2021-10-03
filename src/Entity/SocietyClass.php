@@ -65,14 +65,14 @@ class SocietyClass
                 'desc' => "Technip est une entreprise d'origine française présente dans le management de projets, 
                     l’ingénierie et la construction pour l’industrie de l’énergie (pétrole, gaz, éolien) 
                     mais aussi accessoirement de la chimie.",
-                'img' => 'https://www.technipfmc.com/assets/img/logo.svg',
+                'img' => 'assets/media/img/Technip.svg',
                 'id_category' => 1
             ],
             1 => [
                 'name' => 'Altran',
                 'desc' => 'Altran (renommée Capgemini Engineering depuis 2021) est une entreprise de conseil en ingénierie.
                     Elle a été fondée en France en 1982 par Alexis Kniazeff et Hubert Martigny.',
-                'img' => 'https://www.cycl-op.org/data/sources/users/63/20200615142622-altranpart-of-capgemini.jpg',
+                'img' => 'assets/media/img/Altran.png',
                 'id_category' => 2
             ],
             2 => [
@@ -80,7 +80,7 @@ class SocietyClass
                 'desc' => "ALTEN est une multinationale française d'ingénierie et conseil en technologies et une entreprise
                     de services du numérique (ESN) créée en 1988. Elle est présente dans plus de vingt-huit pays et 
                     emploie 33 800 salariés dont une majorité de consultants, fin 2020.",
-                'img' => 'https://www.aerocontact.com/actualite-aeronautique-spatiale/images/AERO20190725124819.gif',
+                'img' => 'assets/media/img/Alten.png',
                 'id_category' => 2
             ],
             3 => [
@@ -88,7 +88,7 @@ class SocietyClass
                 'desc' => "Egis est une entreprise d'ingénierie française présente dans les secteurs de l'aménagement, 
                     des infrastructures de transport, d’eau et du secteur de l'environnement. Egis travaille dans
                     l'exploitation routière et aéroportuaire.",
-                'img' => 'https://upload.wikimedia.org/wikipedia/fr/5/5b/Logo-egis.gif',
+                'img' => 'assets/media/img/Egis.png',
                 'id_category' => 2
             ],
             4 => [
@@ -96,7 +96,7 @@ class SocietyClass
                 'desc' => 'Assystem est un groupe spécialisé en ingénierie et gestion de projets d’infrastructures critiques
                     et complexes, pour de grands groupes industriels mondiaux, principalement dans le domaine du nucléaire. 
                     La société est cotée à la Bourse de Paris.',
-                'img' => 'https://www.assystem.com/wp-content/themes/assystem-corpo/dist/images/icons/logo-big.png',
+                'img' => 'assets/media/img/Assystem.png',
                 'id_category' => 2
             ]
         ];
