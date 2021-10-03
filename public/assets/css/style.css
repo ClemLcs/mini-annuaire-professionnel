@@ -85,3 +85,7 @@ none{
 .half_size {
     width: 50%;
 }
+
+.width-75{
+    width: 75% !important;
+}

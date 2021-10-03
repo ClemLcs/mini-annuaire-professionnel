@@ -84,7 +84,7 @@ class SocietyController extends AbstractController
      * @param SocietyRepository $societyRepository
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function readAllSociety(SocietyRepository $societyRepository, CategoryRepository $categoryRepository){
+    public function readAllSociety(SocietyRepository $societyRepository){
         $societies = $societyRepository->findAll();
 
         if($societies){
@@ -104,16 +104,38 @@ class SocietyController extends AbstractController
      * @param String $name
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function readOneSociety(String $name){
+    public function readOneSociety(String $name, SocietyRepository $societyRepository){
 
-        $data = [ 'name' => $name];
-        $society = $this->societyClass->checkExistSociety($data);
+        $society = $this->societyClass->checkExistSociety(array('name' => $name));
 
         if ($society) {
-            return $this->render('Society/readOne.html.twig', ['society' => $society, 'categories' => $this->categories]);
+
+            $randomsocieties = $this->randomsocieties($societyRepository, $society->id);
+
+            return $this->render('Society/readOne.html.twig', [
+                'society' => $society,
+                'categories' => $this->categories,
+                'randomsocieties' => $randomsocieties,
+            ]);
         }else{
             $this->addFlash('error', 'Aucune société n\'à été renseignée en BDD avec ce nom');
             return $this->redirectToRoute('readAllSociety');
         }
+    }
+
+    /**
+     * Méthode qui permet de générer deux autres sociétés à consulter par l'utilisateur
+     * @param SocietyRepository $societyRepository
+     * @param Int $current_id
+     * @return mixed
+     */
+    public function randomsocieties(SocietyRepository $societyRepository, Int $current_id){
+
+        $other_societies = $societyRepository->findSocietyExcept($current_id);
+
+        $nb1 = mt_rand(0, count($other_societies) - 1);
+        $nb2 = mt_rand(0, count($other_societies) - 1);
+
+        return array_merge(array($other_societies[$nb1]), array($other_societies[$nb2]));
     }
 }

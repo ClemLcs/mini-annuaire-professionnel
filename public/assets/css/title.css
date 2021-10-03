@@ -1,5 +1,6 @@
 .content-title{
     margin-top: 5vh;
+    padding: 20px;
     justify-items: center;
     justify-content: center;
     color: black;
@@ -10,9 +11,17 @@
     font-size: 55px;
     line-height: 65px;
 }
-.content-title p{
 
+.content-title p{
     font-size: 24px;
     line-height: 24px;
     margin: 2em;
+}
+.content-title span{
+    font-size: 24px;
+    line-height: 24px;
+}
+
+.content-title img{
+    transform: rotate(90deg);
 }

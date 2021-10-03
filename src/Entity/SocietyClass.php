@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -168,4 +169,5 @@ class SocietyClass
         }
 
     }
+
 }
