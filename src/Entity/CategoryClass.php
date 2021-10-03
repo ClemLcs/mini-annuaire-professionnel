@@ -49,7 +49,7 @@ class CategoryClass extends SocietyClass
                 return 0;
             }
             // L'enregistrement existe
-            return 1;
+            return $category;
         }
 
 

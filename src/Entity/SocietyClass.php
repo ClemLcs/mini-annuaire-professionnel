@@ -3,11 +3,13 @@
 namespace App\Entity;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class SocietyClass
 {
 
     public $em;
+    private $abstractController;
 
     /*
      * =============================================
@@ -32,6 +34,13 @@ class SocietyClass
         $this->em = $em;
     }
 
+    /**
+     * @param AbstractController $abstractController
+     */
+    public function setAbstractController(AbstractController $abstractController): void
+    {
+        $this->abstractController = $abstractController;
+    }
 
     /*
      * =============================================
@@ -46,6 +55,13 @@ class SocietyClass
         return $this->em;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getAbstractController()
+    {
+        return $this->abstractController;
+    }
 
     /*
      * =============================================
@@ -118,13 +134,12 @@ class SocietyClass
                    $key => $value
                 ]);
 
-            if (!$society) {
-                // L'enregistrement n'existe pas
+            if ($society) {
+                // L'enregistrement existe
+                return $society;
+            }else{
                 return 0;
             }
-
-            // L'enregistrement existe
-            return 1;
         }
     }
 
