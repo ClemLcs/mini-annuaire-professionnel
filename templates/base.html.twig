@@ -24,9 +24,11 @@
                     </div>
                     <div class="xLarge-9 large-9 medium-12 small-12 xSmall-12">
                         <div class="margin-arround row">
-                            {% for category in categories %}
-                                <li class="li-NavBar"><a href="{{ path('readAllSociety', {'id':category.id}) }}">{{ category.name }}</a></li>
-                            {% endfor %}
+                            {% if categories is defined %}
+                                {% for category in categories %}
+                                    <li class="li-NavBar"><a href="{{ path('readAllSociety', {'id':category.id}) }}">{{ category.name }}</a></li>
+                                {% endfor %}
+                            {% endif %}
                         </div>
                     </div>
                 </section>
@@ -34,8 +36,11 @@
         </nav>
     </header>
     <main class="xLarge-12 large-12 medium-12 small-12 xSmall-12">
+        {% block error %} {% endblock %}
         {% block title %} {% endblock %}
         {% block content %} {% endblock %}
     </main>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="{{ asset('assets/js/script.js') }}"></script>
 </body>
 </html>

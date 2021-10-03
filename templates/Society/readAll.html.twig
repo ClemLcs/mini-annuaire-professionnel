@@ -1,8 +1,18 @@
 {% extends "base.html.twig" %}
 
+{% block error %}
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="flash-{{ label }}">
+                <span style="display: none;">{{ message }}</span>
+            </div>
+        {% endfor %}
+    {% endfor %}
+{% endblock %}
+
 {% block title %}
     <section class="row wrap ">
-        <div class="xLarge-12 large-12 medium-12 small-12 xSmall-12 ">
+        <div class="xLarge-12 large-12 medium-12 small-12 xSmall-12">
             <div class="pad-arround column content-title white ">
                 <h2>Accueil</h2>
                 <p>Vous vous trouvez sur la page principale. Cette page contient la liste de toutes les sociétés référencés sur cette annuaire.</p>
@@ -14,23 +24,28 @@
 {% block content %}
     <section class="row wrap white">
 
-        {% for society in societies %}
-            <div class="xLarge-5 large-5 medium-12 small-12 xSmall-12">
-                <div class="margin-arround row ">
-                    <div class="card-product">
-                        <img src="{{ asset(society.img) }}">
+        {% if societies is defined %}
+            {% for society in societies %}
+                <div class="xLarge-5 large-5 medium-12 small-12 xSmall-12">
+                    <div class="margin-arround row ">
+                        <div class="card-product">
+                            <img src="{{ asset(society.img) }}">
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="xLarge-7 large-7 medium-12 small-12 xSmall-12">
-                <div class="margin-arround">
-                    <div class="">
-                        <h2><a href="{{ path('readAllSociety', {'id':society.id}) }}">{{ society.name }}</a></h2>
-                        <h3>Catégorie: <a href="{{ path('readAllSociety', {'id':society.id}) }}">{{ society.category.name }}</a></h3>
-                        <h3>Crée le: {{ society.createdat|date('d m Y')  }}</h3>
+                <div class="xLarge-7 large-7 medium-12 small-12 xSmall-12">
+                    <div class="margin-arround">
+                        <div class="">
+                            <h2><a href="{{ path('readOneSociety', {'name':society.name}) }}">{{ society.name }}</a></h2>
+                            {% if society.category.name is defined %}
+                                <h3>Catégorie: <a href="{{ path('readAllSociety', {'id':society.id}) }}">{{ society.category.name }}</a></h3>
+                            {% endif %}
+                            <h3>Crée le: {{ society.createdat|date('d m Y')  }}</h3>
+                        </div>
                     </div>
                 </div>
-            </div>
-        {% endfor %}
+            {% endfor %}
+        {% endif %}
+
     </section>
 {% endblock %}
