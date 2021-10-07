@@ -95,5 +95,9 @@ class CategoryClass extends SocietyClass
 
     }
 
+    public function getAllCategories(){
+        return $this->em->getRepository(Category::class)->findAll();
+    }
+
 
 }

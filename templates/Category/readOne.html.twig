@@ -1,23 +1,22 @@
 {% extends "base.html.twig" %}
 
-{% block error %}
-    {% for label, messages in app.flashes %}
-        {% for message in messages %}
-            <div class="flash-{{ label }}">
-                <span style="display: none;">{{ message }}</span>
-            </div>
-        {% endfor %}
-    {% endfor %}
-{% endblock %}
-
 {% block title %}
     <section class="row wrap ">
-        <div class="xLarge-12 large-12 medium-12 small-12 xSmall-12">
-            <div class="pad-arround column content-title white ">
-                <h2>Accueil</h2>
-                <p>Vous vous trouvez sur la page principale. Cette page contient la liste de toutes les sociétés référencés sur cette annuaire.</p>
+        {% if category is defined %}
+            <div class="xLarge-12 large-12 medium-12 small-12 xSmall-12">
+                {% if  societies|length <= 1 %}
+                    <div class="pad-arround column content-title white ">
+                        <h2>{{ category.name }}</h2>
+                        <p>Vous vous trouvez sur la page listant, la société appartenant à la catégorie {{ category.name}}.</p>
+                    </div>
+                {% else %}
+                    <div class="pad-arround column content-title white ">
+                        <h2>{{ category.name }}</h2>
+                        <p>Vous vous trouvez sur la page listant, l'ensemble des sociétés appartenant à la catégorie {{ category.name}}.</p>
+                    </div>
+                {% endif %}
             </div>
-        </div>
+        {% endif %}
     </section>
 {% endblock %}
 

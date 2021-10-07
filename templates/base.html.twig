@@ -30,7 +30,7 @@
                         <div class="margin-arround row">
                             {% if categories is defined %}
                                 {% for category in categories %}
-                                    <li class="li-NavBar"><a href="{{ path('readAllSociety', {'id':category.id}) }}">{{ category.name }}</a></li>
+                                    <li class="li-NavBar"><a href="{{ path('readOneCategory', {'name':category.name}) }}">{{ category.name }}</a></li>
                                 {% endfor %}
                             {% endif %}
                         </div>
