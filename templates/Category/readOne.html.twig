@@ -39,7 +39,7 @@
                             {% if society.category.name is defined %}
                                 <h3>Catégorie: <a href="{{ path('readOneCategory', {'name':society.category.name}) }}">{{ society.category.name }}</a></h3>
                             {% endif %}
-                            <h3>Crée le: {{ society.createdat|date('d m Y')  }}</h3>
+                            <h3>Crée le: {{ society.createdat|date('l d/m/Y à H:i:s')  }}</h3>
                         </div>
                     </div>
                 </div>
