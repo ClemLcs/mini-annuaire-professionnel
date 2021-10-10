@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
-class CUDController extends AbstractController
+class CRUDController extends AbstractController
 {
 
     private ?SocietyClass $societyClass;

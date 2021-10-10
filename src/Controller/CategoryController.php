@@ -10,8 +10,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CategoryController extends AbstractController
 {
-    private $categoryClass;
-    private $em;
+    private ?CategoryClass $categoryClass;
+    private ?EntityManagerInterface $entityManager;
 
     /*
      * =============================================
@@ -21,10 +21,8 @@ class CategoryController extends AbstractController
 
     public function __construct(EntityManagerInterface $entityManager = null)
     {
-        if($entityManager){
-            $this->categoryClass = new CategoryClass($entityManager);
-            $this->em = $entityManager;
-        }
+        $this->entityManager = $entityManager;
+        $this->categoryClass = new CategoryClass($this->entityManager);
     }
 
     /*
@@ -34,19 +32,19 @@ class CategoryController extends AbstractController
     */
 
     /**
-     * @param CategoryClass $categoryClass
+     * @param CategoryClass|null $categoryClass
      */
-    public function setCategoryClass(CategoryClass $categoryClass): void
+    public function setCategoryClass(?CategoryClass $categoryClass): void
     {
         $this->categoryClass = $categoryClass;
     }
 
     /**
-     * @param EntityManagerInterface $em
+     * @param EntityManagerInterface|null $entityManager
      */
-    public function setEm(EntityManagerInterface $em): void
+    public function setEntityManager(?EntityManagerInterface $entityManager): void
     {
-        $this->em = $em;
+        $this->entityManager = $entityManager;
     }
 
     /*
@@ -56,19 +54,19 @@ class CategoryController extends AbstractController
      */
 
     /**
-     * @return mixed
+     * @return CategoryClass|null
      */
-    public function getCategoryClass()
+    public function getCategoryClass(): ?CategoryClass
     {
         return $this->categoryClass;
     }
 
     /**
-     * @return mixed
+     * @return EntityManagerInterface|null
      */
-    public function getEm()
+    public function getEntityManager(): ?EntityManagerInterface
     {
-        return $this->em;
+        return $this->entityManager;
     }
 
     /*
@@ -84,13 +82,13 @@ class CategoryController extends AbstractController
      */
     public function readOneCategory(String $name = null){
         // Vérifie si la catégorie existe avec ce nom
-        $category = $this->categoryClass->checkExistCategory(array('name' => $name));
+        $category = $this->categoryClass->checkExistCategory(['name' => $name])['data'];
 
         $categories = $this->categoryClass->getAllCategories();
 
         if(isset($category)) {
             // Elle existe et nous récupèrons l'ensemble des sociétés selon le numéro de la catégorie
-            $societies = $this->em->getRepository(Society::class)->findBy([
+            $societies = $this->entityManager->getRepository(Society::class)->findBy([
                 'category' => $category->id
             ]);
         }else{

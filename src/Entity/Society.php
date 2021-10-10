@@ -20,7 +20,7 @@ class Society
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $name;
+    public $name;
 
     /**
      * @ORM\Column(type="datetime_immutable", nullable=true)
