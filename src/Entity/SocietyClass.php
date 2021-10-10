@@ -125,7 +125,10 @@ class SocietyClass
                 ]);
 
             if ($society){
-                return "Une société $value est déjà enregistrée en BDD";
+                return [
+                    'data' => $society,
+                    'msg' => "Une société $value est déjà enregistrée en BDD"
+                ];
             }
 
             return True;
@@ -151,7 +154,7 @@ class SocietyClass
             $this->entityManager->persist($data);
             $this->entityManager->flush();
         }else{
-            throw new \Exception($result);
+            throw new \Exception($result['msg']);
         }
     }
 
@@ -179,11 +182,19 @@ class SocietyClass
             $this->entityManager->persist($society);
             $this->entityManager->flush();
         }else{
-            throw new \Exception($result);
+            throw new \Exception($result['msg']);
         }
     }
 
-
+    /**
+     * Méthode qui permet d'envoyer sur le server et insérer en BDD une image
+     * @param Society $society
+     * @param $picture
+     * @param String $folder
+     * @param SluggerInterface $slugger
+     * @return Society|void
+     * @throws \Exception
+     */
     public function uploadFile(Society $society, $picture, String $folder, SluggerInterface $slugger){
         if ($picture) {
             $originalFilename = pathinfo($picture->getClientOriginalName(), PATHINFO_FILENAME);
@@ -194,7 +205,7 @@ class SocietyClass
             try {
 
                 $picture->move($folder, $newFilename);
-                $society->setPicture($newFilename);
+                $society->setPicture('assets/media/img/'.$newFilename);
                 return $society;
 
             } catch (FileException) {

@@ -33,7 +33,7 @@ class CategoryClass extends SocietyClass
     /**
      * Méthode qui permet de vérifier si une catégorie existe dans la BDD
      * @param array|null $data
-     * @return int
+     * @return array|bool|void
      */
     public function checkExistCategory(Array $data = null){
         // Recherche sur la table category une catégorie ayant des données déjà existantes
@@ -46,7 +46,10 @@ class CategoryClass extends SocietyClass
                 ]);
 
             if ($category){
-                return "La catégorie $value est déjà enregistrée en BDD";
+                return [
+                    'data' => $category,
+                    'msg' => "La catégorie $value est déjà enregistrée en BDD"
+                ];
             }
 
             return True;
@@ -72,9 +75,11 @@ class CategoryClass extends SocietyClass
 
             $this->entityManager->persist($category);
             $this->entityManager->flush();
+        }else{
+            throw new \Exception($result['msg']);
         }
 
-        throw new \Exception($result);
+
 
     }
 
