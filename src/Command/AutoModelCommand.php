@@ -114,7 +114,7 @@ class AutoModelCommand extends Command
 
             $this->start();
 
-            $this->askDefautData($input, $output);
+            $this->askDefaultData($input, $output);
 
             $this->finish();
 
@@ -144,7 +144,7 @@ class AutoModelCommand extends Command
         $this->io->success('Toutes les données sont enregistrées avec succès');
     }
 
-    public function askDefautData(InputInterface $input = null, OutputInterface $output = null){
+    public function askDefaultData(InputInterface $input = null, OutputInterface $output = null){
         // Vérifions si l'utilisateur souhaite utiliser les données par défaut
         $resp = $this->io->confirm('Voulez-vous enregitrer les données par défaut ?');
 
@@ -162,6 +162,7 @@ class AutoModelCommand extends Command
         $categories = $this->customCategory->defaultCategory();
         $societies = $this->customSociety->defaultSociety();
 
+
         $this->io->section('Recherche des données par défaut');
         sleep((count($categories) + count($societies))/4);
 
@@ -174,7 +175,7 @@ class AutoModelCommand extends Command
      * Méthode pour permettant de créer une catégorie
      * @param array|null $data
      */
-    public function createCategory(Array $data = null){
+    public function createCategory(array $data = null){
         for ($i=0; $i < count($data); $i++){
             $this->io->note('Enregistrement la catégorie n°'. $i+1 . '.');
             // Enregistrement de la catégorie en BDD
@@ -193,7 +194,7 @@ class AutoModelCommand extends Command
             $this->io->note('Enregistrement la société n°'. $i+1 . '.');
 
             // Enregistrement de la société en BDD
-            $this->customSociety->saveSociety($data[$i]);
+            $this->customSociety->saveSocietyAsArray($data[$i]);
             sleep(1);
 
             // Liaison de la société à une catégorie en BDD

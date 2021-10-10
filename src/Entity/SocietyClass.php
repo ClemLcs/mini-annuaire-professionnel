@@ -2,15 +2,17 @@
 
 namespace App\Entity;
 
-use App\Repository\CategoryRepository;
+use App\Repository\SocietyRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class SocietyClass
 {
 
-    public $em;
-    private $abstractController;
+    public ?EntityManagerInterface $entityManager;
 
     /*
      * =============================================
@@ -18,7 +20,7 @@ class SocietyClass
      * =============================================
      */
     public function __construct(EntityManagerInterface $entityManager = null){
-        $this->em = $entityManager;
+        $this->entityManager = $entityManager;
     }
 
     /*
@@ -28,19 +30,11 @@ class SocietyClass
      */
 
     /**
-     * @param EntityManagerInterface $em
+     * @param EntityManagerInterface|null $entityManager
      */
-    public function setEm(EntityManagerInterface $em)
+    public function setEntityManager(?EntityManagerInterface $entityManager): void
     {
-        $this->em = $em;
-    }
-
-    /**
-     * @param AbstractController $abstractController
-     */
-    public function setAbstractController(AbstractController $abstractController): void
-    {
-        $this->abstractController = $abstractController;
+        $this->entityManager = $entityManager;
     }
 
     /*
@@ -48,21 +42,15 @@ class SocietyClass
      *      Définition des getters de la classe
      * =============================================
      */
-    /**
-     * @return mixed
-     */
-    public function getEm()
-    {
-        return $this->em;
-    }
 
     /**
      * @return mixed
      */
-    public function getAbstractController()
+    public function getEntityManager()
     {
-        return $this->abstractController;
+        return $this->entityManager;
     }
+
 
     /*
      * =============================================
@@ -124,36 +112,63 @@ class SocietyClass
      * @param Int|null $id
      * @return mixed|object
      */
-    public function checkExistSociety(Array $data = null){
+    public function checkExistSociety(Array $data){
 
         // Recherche sur la table société une société ayant des données déjà existantes
 
         foreach ($data as $key => $value){
-            $society = $this->em
+
+            $society = $this->entityManager
                 ->getRepository(Society::class)
                 ->findOneBy([
-                   $key => $value
+                    $key => $value
                 ]);
 
-            if ($society) {
-                // L'enregistrement existe
-                return $society;
-            }else{
-                return 0;
+            if ($society){
+                return "Une société $value est déjà enregistrée en BDD";
             }
+
+            return True;
+
         }
     }
 
     /**
      * Méthode qui permet d'enregistrer une société en BDD
+     * Utilisée dans le CRUD Controller
      * @param array|null $data
      */
-    public function saveSociety(Array $data = null){
+    public function saveSociety($data){
+        $timezone = new \DateTimeZone('Europe/Paris');
+        $dateTime = new \DateTimeImmutable();
 
-        if (!$this->checkExistSociety($data)) {
-            $timezone = new \DateTimeZone('Europe/Paris');
-            $dateTime = new \DateTimeImmutable();
+        $result = $this->checkExistSociety(['name' => $data->name]);
 
+        if($result === True){
+
+            $data->setCreatedAt($dateTime->setTimezone($timezone));
+
+            $this->entityManager->persist($data);
+            $this->entityManager->flush();
+        }else{
+            throw new \Exception($result);
+        }
+    }
+
+    /**
+     * Méthode qui permet d'enregistrer une société en BDD
+     * Utilisé dans la classe AutoModelCommand
+     * @param array $data
+     * @throws \Exception
+     */
+    public function saveSocietyAsArray(Array $data){
+
+        $timezone = new \DateTimeZone('Europe/Paris');
+        $dateTime = new \DateTimeImmutable();
+
+        $result = $this->checkExistSociety(['name' => $data['name']]);
+
+        if($result === True){
             $society = new Society();
 
             $society->setName($data['name']);
@@ -161,13 +176,31 @@ class SocietyClass
             $society->setPicture($data['picture']);
             $society->setCreatedAt($dateTime->setTimezone($timezone));
 
-            $this->em->persist($society);
-            $this->em->flush();
-
+            $this->entityManager->persist($society);
+            $this->entityManager->flush();
         }else{
-            throw new \Exception('Une société existe déjà avec le nom: '. $data['name']);
+            throw new \Exception($result);
         }
+    }
 
+
+    public function uploadFile(Society $society, $picture, String $folder, SluggerInterface $slugger){
+        if ($picture) {
+            $originalFilename = pathinfo($picture->getClientOriginalName(), PATHINFO_FILENAME);
+            $safeFilename = $slugger->slug($originalFilename);
+            $newFilename = $safeFilename.'-'.uniqid().'.'.$picture->guessExtension();
+
+            // Nous déplaçons le fichier dans le répertoire où sont stockées les images sous un nouveau nom.
+            try {
+
+                $picture->move($folder, $newFilename);
+                $society->setPicture($newFilename);
+                return $society;
+
+            } catch (FileException) {
+                throw new \Exception("Une erreur c'est produit pendant l'envoie du formulaire");
+            }
+        }
     }
 
 }

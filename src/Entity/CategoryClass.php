@@ -18,7 +18,8 @@ class CategoryClass extends SocietyClass
      * Méthode qui contient les catégories par défaut
      * @return \string[][]
      */
-    public function defaultCategory(){
+    public function defaultCategory()
+    {
         return [
             0 => [
                 'name' => 'Ingénierie pétrolière et gazière'
@@ -38,18 +39,18 @@ class CategoryClass extends SocietyClass
         // Recherche sur la table category une catégorie ayant des données déjà existantes
 
         foreach ($data as $key => $value){
-            $category = $this->em
+            $category = $this->entityManager
                 ->getRepository(Category::class)
                 ->findOneBy([
                     $key => $value
                 ]);
 
-            if (!$category) {
-                // L'enregistrement n'existe pas
-                return 0;
+            if ($category){
+                return "La catégorie $value est déjà enregistrée en BDD";
             }
-            // L'enregistrement existe
-            return $category;
+
+            return True;
+
         }
 
 
@@ -61,16 +62,20 @@ class CategoryClass extends SocietyClass
      * @throws \Exception
      */
     public function saveCategory(Array $data = null){
-        if (!$this->checkExistCategory($data)){
+
+        $result = $this->checkExistCategory($data);
+
+        if ($result === True){
             $category = new Category();
 
             $category->setName($data['name']);
 
-            $this->em->persist($category);
-            $this->em->flush();
-        }else{
-            throw new \Exception('Une catégorie existe déjà avec le nom: '. $data['name']);
+            $this->entityManager->persist($category);
+            $this->entityManager->flush();
         }
+
+        throw new \Exception($result);
+
     }
 
     /**
@@ -80,15 +85,15 @@ class CategoryClass extends SocietyClass
      */
     public function linkSocietyToCategory(Array $data = null){
 
-        $society = $this->em->getRepository(Society::class)->findOneBy(['name' => $data['name']]);
-        $category = $this->em->getRepository(Category::class)->find($data['id_category']);
+        $society = $this->entityManager->getRepository(Society::class)->findOneBy(['name' => $data['name']]);
+        $category = $this->entityManager->getRepository(Category::class)->find($data['id_category']);
 
         if ($society && $category){
 
             $society->setCategory($category);
 
-            $this->em->persist($society);
-            $this->em->flush();
+            $this->entityManager->persist($society);
+            $this->entityManager->flush();
         }else{
             throw new \Exception('Impossible de lier la société ' . $data['name'] . ' à la catégorie n° '. $data['id_category']);
         }
@@ -96,7 +101,7 @@ class CategoryClass extends SocietyClass
     }
 
     public function getAllCategories(){
-        return $this->em->getRepository(Category::class)->findAll();
+        return $this->entityManager->getRepository(Category::class)->findAll();
     }
 
 
