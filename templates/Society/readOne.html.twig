@@ -5,7 +5,7 @@
         <div class="xLarge-5 large-5 medium-12 small-12 xSmall-12">
             <div class="margin-arround column ">
                 <div class="card-product ">
-                    <img src="{{ asset(society.img) }}">
+                    <img src="{{ asset(society.picture) }}">
                 </div>
             </div>
         </div>
@@ -40,7 +40,7 @@
             <div class="xLarge-6 large-6 medium-12 small-12 xSmall-12">
                 <div class="margin-arround column">
                     <div class="card-product width-75">
-                        <img src="{{ asset(element.img) }}" alt="{{ element.name }}" width="75%">
+                        <img src="{{ asset(element.picture) }}" alt="{{ element.name }}" width="75%">
                         <div class="container-product">
                             <h2><a href="{{ path('readOneSociety', {'name':element.name}) }}">{{ element.name }}</a></h2>
                             <h3>Catégorie: <a href="{{ path('readOneSociety', {'name':element.category.name}) }}">{{ element.category.name }}</a></h3>

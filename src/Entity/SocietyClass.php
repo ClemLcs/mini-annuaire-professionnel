@@ -82,14 +82,14 @@ class SocietyClass
                 'desc' => "Technip est une entreprise d'origine française présente dans le management de projets, 
                     l’ingénierie et la construction pour l’industrie de l’énergie (pétrole, gaz, éolien) 
                     mais aussi accessoirement de la chimie.",
-                'img' => 'assets/media/img/Technip.svg',
+                'picture' => 'assets/media/img/Technip.svg',
                 'id_category' => 1
             ],
             1 => [
                 'name' => 'Altran',
                 'desc' => 'Altran (renommée Capgemini Engineering depuis 2021) est une entreprise de conseil en ingénierie.
                     Elle a été fondée en France en 1982 par Alexis Kniazeff et Hubert Martigny.',
-                'img' => 'assets/media/img/Altran.png',
+                'picture' => 'assets/media/img/Altran.png',
                 'id_category' => 2
             ],
             2 => [
@@ -97,7 +97,7 @@ class SocietyClass
                 'desc' => "ALTEN est une multinationale française d'ingénierie et conseil en technologies et une entreprise
                     de services du numérique (ESN) créée en 1988. Elle est présente dans plus de vingt-huit pays et 
                     emploie 33 800 salariés dont une majorité de consultants, fin 2020.",
-                'img' => 'assets/media/img/Alten.png',
+                'picture' => 'assets/media/img/Alten.png',
                 'id_category' => 2
             ],
             3 => [
@@ -105,7 +105,7 @@ class SocietyClass
                 'desc' => "Egis est une entreprise d'ingénierie française présente dans les secteurs de l'aménagement, 
                     des infrastructures de transport, d’eau et du secteur de l'environnement. Egis travaille dans
                     l'exploitation routière et aéroportuaire.",
-                'img' => 'assets/media/img/Egis.png',
+                'picture' => 'assets/media/img/Egis.png',
                 'id_category' => 2
             ],
             4 => [
@@ -113,7 +113,7 @@ class SocietyClass
                 'desc' => 'Assystem est un groupe spécialisé en ingénierie et gestion de projets d’infrastructures critiques
                     et complexes, pour de grands groupes industriels mondiaux, principalement dans le domaine du nucléaire. 
                     La société est cotée à la Bourse de Paris.',
-                'img' => 'assets/media/img/Assystem.png',
+                'picture' => 'assets/media/img/Assystem.png',
                 'id_category' => 2
             ]
         ];
@@ -158,7 +158,7 @@ class SocietyClass
 
             $society->setName($data['name']);
             $society->setDescription($data['desc']);
-            $society->setImg($data['img']);
+            $society->setPicture($data['picture']);
             $society->setCreatedAt($dateTime->setTimezone($timezone));
 
             $this->em->persist($society);

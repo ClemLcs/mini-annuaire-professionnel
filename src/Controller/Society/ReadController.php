@@ -110,12 +110,12 @@ class SocietyController extends AbstractController
 
         if ($society) {
 
-            $randomsocieties = $this->randomsocieties($societyRepository, $society->id);
+            $randomSocieties = $this->randomSocieties($societyRepository, $society->id);
 
             return $this->render('Society/readOne.html.twig', [
                 'society' => $society,
                 'categories' => $this->categories,
-                'randomsocieties' => $randomsocieties,
+                'randomsocieties' => $randomSocieties,
             ]);
         }else{
             $this->addFlash('error', 'Aucune société n\'à été renseignée en BDD avec ce nom');
@@ -129,7 +129,7 @@ class SocietyController extends AbstractController
      * @param Int $current_id
      * @return mixed
      */
-    public function randomsocieties(SocietyRepository $societyRepository, Int $current_id){
+    public function randomSocieties(SocietyRepository $societyRepository, Int $current_id){
 
         $other_societies = $societyRepository->findSocietyExcept($current_id);
 
@@ -138,4 +138,6 @@ class SocietyController extends AbstractController
 
         return array_merge(array($other_societies[$nb1]), array($other_societies[$nb2]));
     }
+
+    public function
 }

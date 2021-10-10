@@ -21,7 +21,8 @@ class AutoModelCommand extends Command
      * Attributs de la classe
      * @var string
      */
-    protected static $defaultName = 'app:auto-model';
+    protected static $defaultName = 'insert:database';
+    protected static $defaultDescription = "Commande qui permet d'insérer des données par défault en BDD";
 
     private $io;
 

@@ -28,11 +28,6 @@ class Society
     private $created_at;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $img;
-
-    /**
      * @ORM\Column(type="text", nullable=true)
      */
     private $description;
@@ -41,6 +36,11 @@ class Society
      * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="societies")
      */
     private $category;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $picture;
 
     /*
      * =============================================
@@ -63,12 +63,6 @@ class Society
     }
 
 
-    public function setImg(?string $img): self
-    {
-        $this->img = $img;
-
-        return $this;
-    }
 
     public function setDescription(?string $description): self
     {
@@ -105,10 +99,7 @@ class Society
         return $this->created_at;
     }
 
-    public function getImg(): ?string
-    {
-        return $this->img;
-    }
+
 
     public function getDescription(): ?string
     {
@@ -118,5 +109,17 @@ class Society
     public function getCategory(): ?Category
     {
         return $this->category;
+    }
+
+    public function getPicture(): ?string
+    {
+        return $this->picture;
+    }
+
+    public function setPicture(?string $picture): self
+    {
+        $this->picture = $picture;
+
+        return $this;
     }
 }
