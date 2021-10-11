@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\SocietyRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\String\Slugger\SluggerInterface;
@@ -67,7 +68,7 @@ class SocietyClass
         return [
             0 => [
                 'name' => 'Technip',
-                'desc' => "Technip est une entreprise d'origine française présente dans le management de projets, 
+                'description' => "Technip est une entreprise d'origine française présente dans le management de projets, 
                     l’ingénierie et la construction pour l’industrie de l’énergie (pétrole, gaz, éolien) 
                     mais aussi accessoirement de la chimie.",
                 'picture' => 'assets/media/img/Technip.svg',
@@ -75,14 +76,14 @@ class SocietyClass
             ],
             1 => [
                 'name' => 'Altran',
-                'desc' => 'Altran (renommée Capgemini Engineering depuis 2021) est une entreprise de conseil en ingénierie.
+                'description' => 'Altran (renommée Capgemini Engineering depuis 2021) est une entreprise de conseil en ingénierie.
                     Elle a été fondée en France en 1982 par Alexis Kniazeff et Hubert Martigny.',
                 'picture' => 'assets/media/img/Altran.png',
                 'id_category' => 2
             ],
             2 => [
                 'name' => 'Alten',
-                'desc' => "ALTEN est une multinationale française d'ingénierie et conseil en technologies et une entreprise
+                'description' => "ALTEN est une multinationale française d'ingénierie et conseil en technologies et une entreprise
                     de services du numérique (ESN) créée en 1988. Elle est présente dans plus de vingt-huit pays et 
                     emploie 33 800 salariés dont une majorité de consultants, fin 2020.",
                 'picture' => 'assets/media/img/Alten.png',
@@ -90,7 +91,7 @@ class SocietyClass
             ],
             3 => [
                 'name' => 'Egis',
-                'desc' => "Egis est une entreprise d'ingénierie française présente dans les secteurs de l'aménagement, 
+                'description' => "Egis est une entreprise d'ingénierie française présente dans les secteurs de l'aménagement, 
                     des infrastructures de transport, d’eau et du secteur de l'environnement. Egis travaille dans
                     l'exploitation routière et aéroportuaire.",
                 'picture' => 'assets/media/img/Egis.png',
@@ -98,7 +99,7 @@ class SocietyClass
             ],
             4 => [
                 'name' => 'Assystem',
-                'desc' => 'Assystem est un groupe spécialisé en ingénierie et gestion de projets d’infrastructures critiques
+                'description' => 'Assystem est un groupe spécialisé en ingénierie et gestion de projets d’infrastructures critiques
                     et complexes, pour de grands groupes industriels mondiaux, principalement dans le domaine du nucléaire. 
                     La société est cotée à la Bourse de Paris.',
                 'picture' => 'assets/media/img/Assystem.png',
@@ -140,15 +141,20 @@ class SocietyClass
      * Méthode qui permet d'enregistrer une société en BDD
      * Utilisée dans le CRUD Controller
      * @param array|null $data
+     * @throws \Exception
      */
-    public function saveSociety($data){
+    public function saveSociety(Society $data){
         $timezone = new \DateTimeZone('Europe/Paris');
         $dateTime = new \DateTimeImmutable();
 
         $result = $this->checkExistSociety(['name' => $data->name]);
 
-        if($result === True){
+        if(!is_array($result)){
+            //On enregistre les données que si cette donnée n'héxiste pas avec le même nom en BDD
 
+            $data->setName($data->name);
+            $data->setDescription($data->description);
+            $data->setCategory($data->category);
             $data->setCreatedAt($dateTime->setTimezone($timezone));
 
             $this->entityManager->persist($data);
@@ -171,11 +177,12 @@ class SocietyClass
 
         $result = $this->checkExistSociety(['name' => $data['name']]);
 
-        if($result === True){
+        if(!is_array($result)){
+            //On enregistre les données que si cette donnée n'héxiste pas avec le même nom en BDD
             $society = new Society();
 
             $society->setName($data['name']);
-            $society->setDescription($data['desc']);
+            $society->setDescription($data['description']);
             $society->setPicture($data['picture']);
             $society->setCreatedAt($dateTime->setTimezone($timezone));
 
@@ -213,5 +220,4 @@ class SocietyClass
             }
         }
     }
-
 }

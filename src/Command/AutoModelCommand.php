@@ -116,7 +116,7 @@ class AutoModelCommand extends Command
 
             $this->askDefaultData($input, $output);
 
-            $this->finish();
+
 
             return Command::SUCCESS;
         }catch (\Exception $exception){
@@ -150,7 +150,8 @@ class AutoModelCommand extends Command
 
         ($resp)
             ? $this->defaultMode()
-            : '';
+            : $this->io->error('Aucunes données enregistrées en BDD');
+
     }
 
     /**
@@ -202,6 +203,8 @@ class AutoModelCommand extends Command
             $this->customCategory->linkSocietyToCategory($data[$i]);
             sleep(1);
         }
+
+        $this->finish();
     }
 
     /**

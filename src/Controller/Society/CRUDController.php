@@ -12,6 +12,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
@@ -103,8 +104,9 @@ class CRUDController extends AbstractController
     /**
      * Méthode qui retourne le formulaire de création d'une société
      * @Route("/admin/society/create", name="createSociety")
-     * @param EntityManagerInterface $entityManager
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @param Request $request
+     * @param SluggerInterface $slugger
+     * @return Response
      */
     public function createSociety(Request $request, SluggerInterface $slugger){
 
@@ -114,15 +116,30 @@ class CRUDController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+            $name = $form->get('name')->getData();
             $picture = $form->get('picture')->getData();
-            $folder = $this->getParameter('images_directory');
+
+            if ($picture){
+                try{
+                    $destFolder = $this->getParameter('images_directory');
+                    $newSociety =  $this->societyClass->uploadFile($society['data'], $picture, $destFolder, $slugger);
+
+                    $this->societyClass->saveSociety($newSociety);
+
+                    $this->addFlash('success', "La société $name a été créé en BDD");
+                    return $this->redirectToRoute('readAllSociety');
+
+                }catch (\Exception $erreur){
+                    $this->addFlash('error', $erreur->getMessage());
+                    return $this->redirectToRoute('createSociety');
+                }
+            }
 
             try {
 
-                $newSociety =  $this->societyClass->uploadFile($society, $picture, $folder, $slugger);
+                $this->societyClass->saveSociety($form->getData());
 
-                $this->societyClass->saveSociety($newSociety);
-
+                $this->addFlash('success', "La société $name a été créé en BDD");
                 return $this->redirectToRoute('readAllSociety');
 
             }catch (\Exception $erreur){
@@ -134,23 +151,91 @@ class CRUDController extends AbstractController
         }
 
         return $this->render('Admin/createSociety.html.twig', [
-            'form' =>  $form->createView()
+            'form' =>  $form->createView(),
+            'society' => $society
         ]);
 
+    }
+
+    /**
+     * Méthode qui permet de mettre à jour les données d'une société
+     * @Route("/admin/society/update/{name}", name="updateSociety")
+     * @param Request $request
+     * @param SluggerInterface $slugger
+     * @return Response
+     */
+    public function updateSociety(String $name, Request $request, SluggerInterface $slugger){
+
+        $society = $this->societyClass->checkExistSociety(['name' => $name]);
+
+        if (!is_bool($society)){
+            // On vérifie si la société existe avec ce nom
+            $form = $this->createForm(SocietyFormType::class, $society['data']);
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+
+                $name = $form->get('name')->getData();
+                $picture = $form->get('picture')->getData();
+                $id = $form->get('id')->getData();
+
+                if ($picture){
+                    try{
+                        $destFolder = $this->getParameter('images_directory');
+                        $newSociety =  $this->societyClass->uploadFile($society['data'], $picture, $destFolder, $slugger);
+
+                        $this->societyClass->saveSociety($newSociety);
+
+                        $this->addFlash('success', "La société $name a été mise à jour en BDD");
+                        return $this->redirectToRoute('readAllSociety');
+
+                    }catch (\Exception $erreur){
+                        dd($erreur);
+                        $this->addFlash('error', $erreur->getMessage());
+                        return $this->redirectToRoute('updateSociety');
+                    }
+                }
+
+                try {
+
+                    $result = $this->societyClass->checkExistSociety(['id' => $id]);
+                    $newSociety = $result['data'];
+
+                    $this->societyClass->saveSociety($newSociety);
+
+                    $this->addFlash('success', "La société $name a été mise à jour en BDD");
+                    return $this->redirectToRoute('readAllSociety');
+
+                }catch (\Exception $erreur){
+
+                    $this->addFlash('error', $erreur->getMessage());
+                    return $this->redirectToRoute('updateSociety');
+                }
+
+            }
+
+            return $this->render('Admin/adminSociety.html.twig', [
+                'form' =>  $form->createView(),
+                'society' => $society['data']
+            ]);
+        }else{
+            $this->addFlash('error', "Aucune société n'éxiste avec le nom $name");
+            return $this->redirectToRoute('readAllSociety');
+        }
     }
 
     /**
      * Méthode permettant d'afficher toutes les sociétés
      * @Route("/", name="readAllSociety")
      * @param SocietyRepository $societyRepository
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function readAllSociety(SocietyRepository $societyRepository){
-        $societies = $societyRepository->findAll();
+        $societies_reversed = array_reverse($societyRepository->findAll());
 
-        if($societies){
+        if($societies_reversed){
             return $this->render('Society/readAll.html.twig', [
-                'societies' => $societies,
+                'societies' => $societies_reversed,
                 'categories' => $this->categories
             ]);
         }else{
@@ -163,7 +248,7 @@ class CRUDController extends AbstractController
      * Méthode permettant d'afficher une société
      * @Route("/society/read/{name}", name="readOneSociety")
      * @param String $name
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
     public function readOneSociety(String $name, SocietyRepository $societyRepository){
 
@@ -171,7 +256,7 @@ class CRUDController extends AbstractController
 
         if ($society) {
 
-            $randomSocieties = $this->randomSocieties($societyRepository, $society->id);
+            $randomSocieties = $this->randomSocieties($societyRepository, $society->name);
 
             return $this->render('Society/readOne.html.twig', [
                 'society' => $society,
@@ -190,9 +275,9 @@ class CRUDController extends AbstractController
      * @param Int $current_id
      * @return mixed
      */
-    public function randomSocieties(SocietyRepository $societyRepository, Int $current_id){
+    public function randomSocieties(SocietyRepository $societyRepository, String $current_name){
 
-        $other_societies = $societyRepository->findSocietyExcept($current_id);
+        $other_societies = $societyRepository->findSocietyExcept($current_name);
 
         $nb1 = mt_rand(0, count($other_societies) - 1);
         $nb2 = mt_rand(0, count($other_societies) - 1);

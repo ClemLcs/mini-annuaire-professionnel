@@ -86,21 +86,23 @@ class CategoryController extends AbstractController
 
         $categories = $this->categoryClass->getAllCategories();
 
-        if(isset($category)) {
+        if(!is_null($category)) {
             // Elle existe et nous récupèrons l'ensemble des sociétés selon le numéro de la catégorie
             $societies = $this->entityManager->getRepository(Society::class)->findBy([
                 'category' => $category->id
             ]);
+
+            $societies_reversed = array_reverse($societies);
         }else{
             $this->addFlash('error', 'Aucune catégorie n\'à été renseigné avec ce nom en BDD');
             return $this->redirectToRoute('readAllSociety');
         }
 
-        if (isset($societies)){
+        if (!is_null($societies_reversed)){
             return $this->render('Category/readOne.html.twig',[
                 'category' => $category,
                 'categories' => $categories,
-                'societies' => $societies
+                'societies' => $societies_reversed
             ]);
         }else{
             $this->addFlash('error', 'Aucune société n\'à été associée à cette catégorie en BDD');

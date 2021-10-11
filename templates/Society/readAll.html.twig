@@ -1,5 +1,15 @@
 {% extends "base.html.twig" %}
 
+{% block success %}
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="flash-{{ label }}">
+                <span style="display: none;">{{ message }}</span>
+            </div>
+        {% endfor %}
+    {% endfor %}
+{% endblock %}
+
 {% block error %}
     {% for label, messages in app.flashes %}
         {% for message in messages %}
@@ -25,11 +35,15 @@
     <section class="row wrap white">
 
         {% if societies is defined %}
+
             {% for society in societies %}
+
                 <div class="xLarge-5 large-5 medium-12 small-12 xSmall-12">
                     <div class="margin-arround row ">
                         <div class="card-product">
-                            <img src="{{ asset(society.picture) }}">
+                            {% if society.picture is not null %}
+                                <img src="{{ asset(society.picture) }}">
+                            {% endif %}
                         </div>
                     </div>
                 </div>

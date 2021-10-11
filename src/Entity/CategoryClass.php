@@ -68,7 +68,9 @@ class CategoryClass extends SocietyClass
 
         $result = $this->checkExistCategory($data);
 
-        if ($result === True){
+        if (!is_array($result)){
+            //On enregistre la donnée que si cette donnée n'héxiste pas avec le même nom  en BDD
+
             $category = new Category();
 
             $category->setName($data['name']);

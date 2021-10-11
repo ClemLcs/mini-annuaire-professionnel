@@ -30,12 +30,12 @@ class Society
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    private $description;
+    public $description;
 
     /**
      * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="societies")
      */
-    private $category;
+    public $category;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)

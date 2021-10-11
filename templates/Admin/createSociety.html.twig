@@ -25,7 +25,7 @@
 
                         <div class="form-group">
                             {{ form_label(form.picture, "Image") }}
-                            {{ form_row(form.picture, {'attr': {'class': 'form-control-file'}}) }}
+                            {{ form_widget(form.picture, {'attr': {'class': 'form-control-file'}}) }}
                             {{ form_errors(form.picture) }}
                         </div>
 
@@ -41,7 +41,6 @@
                             {{ form_errors(form.category) }}
                         </div>
 
-                        <input type="hidden" name="token" value="{{ csrf_token('create-society') }}"/>
                         <button type="submit">Envoyer</button>
                     {{ form_end(form) }}
                 </form>

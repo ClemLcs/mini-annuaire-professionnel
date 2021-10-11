@@ -1,5 +1,6 @@
 const error = document.querySelector('.flash-error');
 const warning = document.querySelector('.flash-warning');
+const success = document.querySelector('.flash-success');
 
 if (error){
     swal({
@@ -14,5 +15,13 @@ if(warning){
         icon: "warning",
         title: "Une erreur s'est produite",
         text: warning.children[0].innerHTML
+    });
+}
+
+if(success){
+    swal({
+        icon: "success",
+        title: "Success",
+        text: success.children[0].innerHTML
     });
 }

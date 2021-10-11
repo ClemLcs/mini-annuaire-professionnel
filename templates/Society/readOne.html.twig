@@ -5,7 +5,9 @@
         <div class="xLarge-5 large-5 medium-12 small-12 xSmall-12">
             <div class="margin-arround column ">
                 <div class="card-product ">
-                    <img src="{{ asset(society.picture) }}">
+                    {% if society.picture is not null %}
+                        <img src="{{ asset(society.picture) }}">
+                    {% endif %}
                 </div>
             </div>
         </div>

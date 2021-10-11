@@ -19,10 +19,10 @@ class SocietyRepository extends ServiceEntityRepository
         parent::__construct($registry, Society::class);
     }
 
-    public function findSocietyExcept(Int $societyId){
+    public function findSocietyExcept(String $societyName){
         return $this->createQueryBuilder('society')
-            ->where('society.id != :val')
-            ->setParameter('val', $societyId)
+            ->where('society.name != :val')
+            ->setParameter('val', $societyName)
             ->getQuery()
             ->getResult();
     }
