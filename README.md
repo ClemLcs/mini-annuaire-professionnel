@@ -11,7 +11,7 @@ En en souhaitant bonne réception et restant à votre disposition.
 
 Bien à vous.
 
-#Objectif : créer un mini-annuaire professionnel (3 pages) et un espace admin pour le CRUD d'une société
+# Objectif : créer un mini-annuaire professionnel (3 pages) et un espace admin pour le CRUD d'une société
 MCD : 
 - société : nom de la société, date de création, image principale (picture), description,
 - catégorie : nom
