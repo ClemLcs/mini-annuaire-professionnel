@@ -117,6 +117,7 @@ class CRUDController extends AbstractController
         $society = new Society();
         $form = $this->createForm(SocietyFormType::class, $society);
         $formSearch = $this->createForm(SearchSocietyType::class, $society);
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -127,7 +128,7 @@ class CRUDController extends AbstractController
             if ($picture){
                 try{
                     $destFolder = $this->getParameter('images_directory');
-                    $newSociety =  $this->societyClass->uploadFile($society['data'], $picture, $destFolder, $slugger);
+                    $newSociety =  $this->societyClass->uploadFile($society, $picture, $destFolder, $slugger);
 
                     $this->societyClass->saveSociety($newSociety);
 
@@ -158,7 +159,8 @@ class CRUDController extends AbstractController
         return $this->render('Admin/createSociety.html.twig', [
             'form' =>  $form->createView(),
             'formSearch' => $formSearch->createView(),
-            'society' => $society
+            'society' => $society,
+            'categories' => $this->categories,
         ]);
 
     }
@@ -173,6 +175,9 @@ class CRUDController extends AbstractController
     public function updateSociety(String $name, Request $request, SluggerInterface $slugger){
 
         $society = $this->societyClass->checkExistSociety(['name' => $name]);
+
+        $forSearchForm = new Society();
+        $formSearch = $this->createForm(SearchSocietyType::class, $forSearchForm);
 
         if (!is_bool($society)){
             // On vérifie si la société existe avec ce nom
@@ -217,7 +222,9 @@ class CRUDController extends AbstractController
 
             return $this->render('Admin/adminSociety.html.twig', [
                 'form' =>  $form->createView(),
-                'society' => $society['data']
+                'society' => $society['data'],
+                'categories' => $this->categories,
+                'formSearch' => $formSearch->createView()
             ]);
         }else{
             $this->addFlash('error', "Aucune société n'éxiste avec le nom $name");
@@ -256,6 +263,9 @@ class CRUDController extends AbstractController
      */
     public function readAllSociety(SocietyRepository $societyRepository, Request $request){
 
+        $society = new Society();
+        $formSearch = $this->createForm(SearchSocietyType::class, $society);
+
         if ($request->query->get('searchSocietyPattern')){
 
             $search = $request->query->get('searchSocietyPattern');
@@ -265,10 +275,6 @@ class CRUDController extends AbstractController
         }else{
             $societies_reversed = array_reverse($societyRepository->findAll());
         }
-
-
-        $society = new Society();
-        $formSearch = $this->createForm(SearchSocietyType::class, $society);
 
         if(!empty($societies_reversed)){
             return $this->render('Society/readAll.html.twig', [
@@ -294,7 +300,9 @@ class CRUDController extends AbstractController
     public function readOneSociety(String $name, SocietyRepository $societyRepository){
 
         $society = $this->societyClass->checkExistSociety(['name' => $name]);
-        $formSearch = $this->createForm(SearchSocietyType::class, $society);
+
+        $forSearchForm = new Society();
+        $formSearch = $this->createForm(SearchSocietyType::class, $forSearchForm);
 
         if (is_array($society)) {
 

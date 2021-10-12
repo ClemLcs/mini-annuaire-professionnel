@@ -35,6 +35,7 @@
                                     <li class="li-NavBar"><a href="{{ path('readOneCategory', {'name':category.name}) }}">{{ category.name }}</a></li>
                                 {% endfor %}
                             {% endif %}
+                            <li class="li-NavBar"><a href="{{ path('createSociety') }}">Créer une société</a></li>
                             <li class="li-NavBar">
                                 <form method="POST" action="{{ path('searchSociety') }}">
                                     {{ form_start(formSearch) }}

@@ -17,6 +17,8 @@
                 <form method="POST" enctype="multipart/form-data">
                     {{ form_start(form) }}
 
+                    <h1>Formulaire de création d'une société</h1>
+
                         <div class="form-group">
                             {{ form_label(form.name, "Nom") }}
                             {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
