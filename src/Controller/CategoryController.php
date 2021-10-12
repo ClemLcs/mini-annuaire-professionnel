@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\CategoryClass;
 use App\Entity\Society;
+use App\Form\SearchSocietyType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -86,6 +87,10 @@ class CategoryController extends AbstractController
 
         $categories = $this->categoryClass->getAllCategories();
 
+        $society = new Society();
+        $formSearch = $this->createForm(SearchSocietyType::class, $society);
+
+
         if(!is_null($category)) {
             // Elle existe et nous récupèrons l'ensemble des sociétés selon le numéro de la catégorie
             $societies = $this->entityManager->getRepository(Society::class)->findBy([
@@ -95,18 +100,19 @@ class CategoryController extends AbstractController
             $societies_reversed = array_reverse($societies);
         }else{
             $this->addFlash('error', 'Aucune catégorie n\'à été renseigné avec ce nom en BDD');
-            return $this->redirectToRoute('readAllSociety');
+            return $this->redirectToRoute('readAllSociety', [], 301);
         }
 
         if (!is_null($societies_reversed)){
             return $this->render('Category/readOne.html.twig',[
                 'category' => $category,
                 'categories' => $categories,
-                'societies' => $societies_reversed
+                'societies' => $societies_reversed,
+                'formSearch' => $formSearch->createView()
             ]);
         }else{
             $this->addFlash('error', 'Aucune société n\'à été associée à cette catégorie en BDD');
-            return $this->redirectToRoute('readAllSociety');
+            return $this->redirectToRoute('readAllSociety', [], 301);
         }
     }
 }
