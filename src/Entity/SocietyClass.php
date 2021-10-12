@@ -149,19 +149,13 @@ class SocietyClass
 
         $result = $this->checkExistSociety(['name' => $data->name]);
 
-        if(!is_array($result)){
-            //On enregistre les données que si cette donnée n'héxiste pas avec le même nom en BDD
+        $data->setName($data->name);
+        $data->setDescription($data->description);
+        $data->setCategory($data->category);
+        $data->setCreatedAt($dateTime->setTimezone($timezone));
 
-            $data->setName($data->name);
-            $data->setDescription($data->description);
-            $data->setCategory($data->category);
-            $data->setCreatedAt($dateTime->setTimezone($timezone));
-
-            $this->entityManager->persist($data);
-            $this->entityManager->flush();
-        }else{
-            throw new \Exception($result['msg']);
-        }
+        $this->entityManager->persist($data);
+        $this->entityManager->flush();
     }
 
     /**

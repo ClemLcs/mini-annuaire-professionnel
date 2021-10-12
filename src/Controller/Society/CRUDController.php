@@ -180,20 +180,23 @@ class CRUDController extends AbstractController
                 $id = $form->get('id')->getData();
 
                 if ($picture){
-                    try{
-                        $destFolder = $this->getParameter('images_directory');
-                        $newSociety =  $this->societyClass->uploadFile($society['data'], $picture, $destFolder, $slugger);
 
-                        $this->societyClass->saveSociety($newSociety);
+                    $destFolder = $this->getParameter('images_directory');
+                    $newSociety =  $this->societyClass->uploadFile($society['data'], $picture, $destFolder, $slugger);
 
-                        $this->addFlash('success', "La société $name a été mise à jour en BDD");
-                        return $this->redirectToRoute('readAllSociety');
+                    $this->societyClass->saveSociety($newSociety);
+
+                    $this->addFlash('success', "La société $name a été mise à jour en BDD");
+                    return $this->redirectToRoute('readAllSociety');
+
+                   /* try{
+
 
                     }catch (\Exception $erreur){
                         dd($erreur);
                         $this->addFlash('error', $erreur->getMessage());
                         return $this->redirectToRoute('updateSociety');
-                    }
+                    }*/
                 }
 
                 try {
@@ -252,9 +255,11 @@ class CRUDController extends AbstractController
      */
     public function readOneSociety(String $name, SocietyRepository $societyRepository){
 
-        $society = $this->societyClass->checkExistSociety(['name' => $name])['data'];
+        $society = $this->societyClass->checkExistSociety(['name' => $name]);
 
-        if ($society) {
+        if (is_array($society)) {
+
+            $society = $society['data'];
 
             $randomSocieties = $this->randomSocieties($societyRepository, $society->name);
 
