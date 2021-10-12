@@ -24,7 +24,6 @@ class CRUDController extends AbstractController
     private ?SocietyClass $societyClass;
     private EntityManagerInterface $entityManager;
     private $categories;
-    private ?Array $searchSocieties;
 
     /*
      * =============================================
@@ -36,7 +35,6 @@ class CRUDController extends AbstractController
         $this->entityManager = $entityManager;
         $this->societyClass = new SocietyClass($this->entityManager);
         $this->categories = $categoryRepository->findAll();
-        $this->searchSocieties = [];
     }
 
     /*
@@ -69,13 +67,6 @@ class CRUDController extends AbstractController
         $this->categories = $categories;
     }
 
-    /**
-     * @param Array|null $searchSocieties
-     */
-    public function setSearchSocieties(?array $searchSocieties): void
-    {
-        $this->searchSocieties = $searchSocieties;
-    }
 
     /*
      * =============================================
@@ -107,13 +98,6 @@ class CRUDController extends AbstractController
         return $this->categories;
     }
 
-    /**
-     * @return Array|null
-     */
-    public function getSearchSocieties(): ?array
-    {
-        return $this->searchSocieties;
-    }
 
     /*
      * =============================================
