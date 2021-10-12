@@ -228,6 +228,29 @@ class CRUDController extends AbstractController
     }
 
     /**
+     * Méthode permettant de supprimer une société
+     * @Route("/admin/society/delete/{name}", name="deleteSociety")
+     * @param String $name
+     * @param SocietyRepository $societyRepository
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function deleteSociety(String $name, SocietyRepository $societyRepository){
+            $society = $societyRepository->findOneBy(['name' => $name]);
+
+            if(!is_null($society)){
+
+                $this->entityManager->remove($society);
+                $this->entityManager->flush();
+
+                $this->addFlash('success', "La société $name a bien été supprimé en BDD");
+                return $this->redirectToRoute('readAllSociety');
+            }
+
+            $this->addFlash('error', "Une erreur c'est produite lors de la suppression de la société $name");
+            return $this->redirectToRoute('readAllSociety');
+    }
+
+    /**
      * Méthode permettant d'afficher toutes les sociétés
      * @Route("/", name="readAllSociety")
      * @param SocietyRepository $societyRepository
