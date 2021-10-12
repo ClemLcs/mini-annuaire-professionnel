@@ -19,10 +19,28 @@ class SocietyRepository extends ServiceEntityRepository
         parent::__construct($registry, Society::class);
     }
 
+    /**
+     * Méthode permettant de retourner toutes les sociétés sauf une bien précise
+     * @param String $societyName
+     * @return int|mixed|string
+     */
     public function findSocietyExcept(String $societyName){
         return $this->createQueryBuilder('society')
             ->where('society.name != :val')
             ->setParameter('val', $societyName)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Méthode qui permet de retourner un ensemble de sociétés selon un schéma
+     * @param String $search
+     * @return int|mixed|string
+     */
+    public function findSocietyByPattern(String $search){
+        return $this->createQueryBuilder('searchSociety')
+            ->where('searchSociety.name LIKE :value')
+            ->setParameter('value', '%'.$search.'%')
             ->getQuery()
             ->getResult();
     }

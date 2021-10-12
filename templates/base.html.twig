@@ -35,6 +35,18 @@
                                     <li class="li-NavBar"><a href="{{ path('readOneCategory', {'name':category.name}) }}">{{ category.name }}</a></li>
                                 {% endfor %}
                             {% endif %}
+                            <li class="li-NavBar">
+                                <form method="POST" action="{{ path('searchSociety') }}">
+                                    {{ form_start(formSearch) }}
+                                        <div class="form-group">
+                                            {{ form_label(formSearch.name, "Rechercher une société par nom") }}
+                                            {{ form_widget(formSearch.name, {'attr': {'class': 'form-control'}}) }}
+                                            {{ form_errors(formSearch.name) }}
+                                        </div>
+                                        <button type="submit">Envoyer</button>
+                                    {{ form_end(formSearch) }}
+                                </form>
+                            </li>
                         </div>
                     </div>
                 </section>
