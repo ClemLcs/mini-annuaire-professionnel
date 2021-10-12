@@ -148,11 +148,11 @@ class CRUDController extends AbstractController
                     $this->societyClass->saveSociety($newSociety);
 
                     $this->addFlash('success', "La société $name a été créé en BDD");
-                    return $this->redirectToRoute('readAllSociety');
+                    return $this->redirectToRoute('readAllSociety', [], 301);
 
                 }catch (\Exception $erreur){
                     $this->addFlash('error', $erreur->getMessage());
-                    return $this->redirectToRoute('createSociety');
+                    return $this->redirectToRoute('createSociety', [], 301);
                 }
             }
 
@@ -161,12 +161,12 @@ class CRUDController extends AbstractController
                 $this->societyClass->saveSociety($form->getData());
 
                 $this->addFlash('success', "La société $name a été créé en BDD");
-                return $this->redirectToRoute('readAllSociety');
+                return $this->redirectToRoute('readAllSociety', [], 301);
 
             }catch (\Exception $erreur){
 
                 $this->addFlash('error', $erreur->getMessage());
-                return $this->redirectToRoute('createSociety');
+                return $this->redirectToRoute('createSociety', [], 301);
             }
 
         }
@@ -209,16 +209,8 @@ class CRUDController extends AbstractController
                     $this->societyClass->saveSociety($newSociety);
 
                     $this->addFlash('success', "La société $name a été mise à jour en BDD");
-                    return $this->redirectToRoute('readAllSociety');
+                    return $this->redirectToRoute('readAllSociety', [], 301);
 
-                   /* try{
-
-
-                    }catch (\Exception $erreur){
-                        dd($erreur);
-                        $this->addFlash('error', $erreur->getMessage());
-                        return $this->redirectToRoute('updateSociety');
-                    }*/
                 }
 
                 try {
@@ -229,12 +221,12 @@ class CRUDController extends AbstractController
                     $this->societyClass->saveSociety($newSociety);
 
                     $this->addFlash('success', "La société $name a été mise à jour en BDD");
-                    return $this->redirectToRoute('readAllSociety');
+                    return $this->redirectToRoute('readAllSociety', [], 301);
 
                 }catch (\Exception $erreur){
 
                     $this->addFlash('error', $erreur->getMessage());
-                    return $this->redirectToRoute('updateSociety');
+                    return $this->redirectToRoute('updateSociety', [], 301);
                 }
 
             }
@@ -245,7 +237,7 @@ class CRUDController extends AbstractController
             ]);
         }else{
             $this->addFlash('error', "Aucune société n'éxiste avec le nom $name");
-            return $this->redirectToRoute('readAllSociety');
+            return $this->redirectToRoute('readAllSociety', [], 301);
         }
     }
 
@@ -265,11 +257,11 @@ class CRUDController extends AbstractController
                 $this->entityManager->flush();
 
                 $this->addFlash('success', "La société $name a bien été supprimé en BDD");
-                return $this->redirectToRoute('readAllSociety');
+                return $this->redirectToRoute('readAllSociety', [], 301);
             }
 
             $this->addFlash('error', "Une erreur c'est produite lors de la suppression de la société $name");
-            return $this->redirectToRoute('readAllSociety');
+            return $this->redirectToRoute('readAllSociety', [], 301);
     }
 
     /**
@@ -334,7 +326,7 @@ class CRUDController extends AbstractController
             ]);
         }else{
             $this->addFlash('error', 'Aucune société n\'à été renseignée en BDD avec ce nom');
-            return $this->redirectToRoute('readAllSociety');
+            return $this->redirectToRoute('readAllSociety', [], 301);
         }
     }
 
